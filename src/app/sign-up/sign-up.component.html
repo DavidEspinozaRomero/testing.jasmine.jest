@@ -1,0 +1,33 @@
+<div class="container mt-4">
+  <h1>Sign Up</h1>
+
+  <form [formGroup]="miForm" (submit)="save()">
+    <label for="username">Username</label>
+    <!-- #inputusername -->
+    <!-- (input)="username = inputusername.value" -->
+    <input id="username" type="text" formControlName="username" />
+    <br />
+    <label for="email">E-mail</label>
+    <!-- #inputemail
+    (input)="email = inputemail.value" -->
+    <input id="email" type="email" formControlName="email" />
+    <br />
+    <label for="password">Password</label>
+    <input
+      id="password"
+      type="password"
+      formControlName="password"
+      (input)="onChangePassword()"
+    />
+    <br />
+    <label for="passwordrepeat">Password Repeat</label>
+    <input
+      id="passwordrepeat"
+      type="password"
+      formControlName="passwordrepeat"
+      (input)="onChangePasswordRepeat()"
+    />
+    <br />
+    <button [disabled]="btndisabled">Sign Up</button>
+  </form>
+</div>
