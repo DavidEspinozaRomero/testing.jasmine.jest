@@ -7,19 +7,19 @@ import {
 
 import { render, screen, waitFor } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
-// import { rest } from 'msw';
-// import { setupServer } from 'msw/node';
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
 // import 'whatwg-fetch'
 
 import { SignUpComponent } from './sign-up.component';
 
-// let resquestBody: any;
-// const server = setupServer(
-//   rest.post('/api/1.0/users', (req, res, ctx) => {
-//     resquestBody = req.body;
-//     return res(ctx.status(200), ctx.json({}));
-//   })
-// );
+let resquestBody: any;
+const server = setupServer(
+  rest.post('/api/1.0/users', (req, res, ctx) => {
+    resquestBody = req.body;
+    return res(ctx.status(200), ctx.json({}));
+  })
+);
 
 const setup = async () => {
   await render(SignUpComponent, {
@@ -27,8 +27,8 @@ const setup = async () => {
   });
 };
 
-// beforeAll(() => server.listen());
-// afterAll(() => server.close());
+beforeAll(() => server.listen());
+afterAll(() => server.close());
 
 describe('SignUpComponent', () => {
   beforeEach(async () => {
@@ -91,7 +91,6 @@ describe('SignUpComponent', () => {
 
     it('should Post the form to the backend', async () => {
       // await setup();
-
       const username = screen.getByLabelText('Username');
       const email = screen.getByLabelText('E-mail');
       const password = screen.getByLabelText('Password');
@@ -105,44 +104,59 @@ describe('SignUpComponent', () => {
       await userEvent.click(button);
 
       //#region MockServer HttpClientModule
-      // await waitFor(() => {
-      //   const result = {
-      //     username: 'user1',
-      //     email: 'user1@gmail.com',
-      //     password: 'secretpassword',
-      //   };
+      await waitFor(() => {
+        const result = {
+          username: 'user1',
+          email: 'user1@gmail.com',
+          password: 'secretpassword',
+        };
 
-      //   expect(resquestBody).toEqual(result);
-      // });
+        expect(resquestBody).toEqual(result);
+      });
       //#endregion MockServer
-
-      // #region whit HttpClientTestingModule
-      // const http = TestBed.inject(HttpTestingController);
-
-      // const call = http.expectOne('/api/1.0/users');
-      // const reqBody = call.request.body
-      // console.log(call);
-      // const result = {
-      //   username: 'user1',
-      //   email: 'user1@gmail.com',
-      //   password: 'secretpassword',
-      // };
-
-      // expect(reqBody).toEqual(result);
-      // #endregion
-
-      // #region whit fetch
-      // const spy = jest.spyOn(window, 'fetch');
-      // const call = spy.mock.calls[0];
-      // const secondParam = call[1] as RequestInit;
-      // const result = JSON.stringify({
-      //   username: 'user1',
-      //   email: 'user1@gmail.com',
-      //   password: 'secretpassword',
-      // });
-
-      // expect(secondParam.body).toEqual(result);
-      // #endregion
     });
+    // it('should Post the form to the backend ', async () => {
+    //   // await setup();
+
+    //   const username = screen.getByLabelText('Username');
+    //   const email = screen.getByLabelText('E-mail');
+    //   const password = screen.getByLabelText('Password');
+    //   const passwordRepeat = screen.getByLabelText('Password Repeat');
+    //   const button = screen.getByRole('button', { name: 'Sign Up' });
+
+    //   await userEvent.type(username, 'user1');
+    //   await userEvent.type(email, 'user1@gmail.com');
+    //   await userEvent.type(password, 'secretpassword');
+    //   await userEvent.type(passwordRepeat, 'secretpassword');
+    //   await userEvent.click(button);
+
+    //   // #region whit HttpClientTestingModule
+    //   // const http = TestBed.inject(HttpTestingController);
+
+    //   // const call = http.expectOne('/api/1.0/users');
+    //   // const reqBody = call.request.body
+    //   // console.log(call);
+    //   // const result = {
+    //   //   username: 'user1',
+    //   //   email: 'user1@gmail.com',
+    //   //   password: 'secretpassword',
+    //   // };
+
+    //   // expect(reqBody).toEqual(result);
+    //   // #endregion
+
+    //   // #region whit fetch
+    //   // const spy = jest.spyOn(window, 'fetch');
+    //   // const call = spy.mock.calls[0];
+    //   // const secondParam = call[1] as RequestInit;
+    //   // const result = JSON.stringify({
+    //   //   username: 'user1',
+    //   //   email: 'user1@gmail.com',
+    //   //   password: 'secretpassword',
+    //   // });
+
+    //   // expect(secondParam.body).toEqual(result);
+    //   // #endregion
+    // });
   });
 });
